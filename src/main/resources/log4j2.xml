@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Specify the refresh internal in seconds. -->
+<Configuration status="info" monitorInterval="30" shutdownHook="disable">
+
+    <Properties>
+        <!--!!!!!DO NOT FORMAT THESE SECTION ON MULTIPLE LINES!!!!!!-->
+        <Property name="APP_ID">${web:contextPath}</Property>
+        <Property name="BASE_DIR">${sys:catalina.base}/logs/${APP_ID}/</Property>
+        <Property name="PATTERN_PREFIX">${APP_ID}:</Property>
+
+        <Property name="layoutDate">%d{yyyy-MM-dd HH:mm:ss.SSS}</Property>
+        <Property name="layoutLocation">(%F:%L)</Property>
+        <Property name="layoutAppPrefix">%style{${PATTERN_PREFIX}}{magenta}</Property>
+        <Property name="layoutLevelColour">{FATAL=red blink, ERROR=red blink, WARN=yellow bold, INFO=black, DEBUG=green
+            bold, TRACE=blue}
+        </Property>
+        <Property name="layoutLevel">%highlight{${LOG_LEVEL_PATTERN:-%5p}}${layoutLevelColour}</Property>
+        <Property name="layoutMSG">%m%n${LOG_EXCEPTION_CONVERSION_WORD:-%xEx}</Property>
+
+        <!-- SPRING BOOT STYLE PATTERN WITH ANSI -->
+        <Property name="LOG_PATTERN_SPRING_BOOT_STYLE_ANSI">
+            ${layoutAppPrefix} ${layoutDate} ${layoutLevel} --- [%15.15t] %style{%-40.40c{1.}}{cyan} : ${layoutMSG}
+        </Property>
+        <!-- SIMPLE PATTERN, NO ANSI, WITH FILE LOCATION -->
+        <Property name="LOG_PATTERN_NO_ANSI_LOC">
+            ${PATTERN_PREFIX} ${layoutDate} %-5p ${layoutLocation} - %m%n
+        </Property>
+        <!-- STYLE PATTERN WITH ANSI, LOCATION, METHOD NAME, WILL COLOR ALL MESSAGE DEPENDING ON THE LEVEL - NOT SUITABLE FOR PRODUCTION, MIGHT BE EXPENSIVE -->
+        <Property name="LOG_PATTERN_ANSI_LOC">
+            ${layoutAppPrefix} %highlight{${layoutDate} %-5level %logger{1.}.%M() ${layoutLocation}
+            -${layoutMSG}}${layoutLevelColour}
+        </Property>
+        <Property name="LOG_PATTERN_SIMPLE">
+            Tomcat: ${layoutDate} %-5p [%t] %c{1} - %m%n
+        </Property>
+
+        <!--THE ACTUAL LOG PATTERN BEING USED, REFERENCING ONE OF THE ABOVE-->
+        <Property name="LOG_PATTERN">
+            ${LOG_PATTERN_SIMPLE}
+        </Property>
+
+    </Properties>
+
+    <Appenders>
+
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout disableAnsi="false" pattern="${LOG_PATTERN}"/>
+        </Console>
+
+
+    </Appenders>
+    <Loggers>
+
+        <Logger name="org.springframework" level="INFO" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+        </Logger>
+
+        <Root level="INFO">
+            <AppenderRef ref="CONSOLE"/>
+        </Root>
+
+    </Loggers>
+</Configuration>
