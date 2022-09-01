@@ -9,13 +9,17 @@
 // =============================================================================
 package com.darku;
 
+import java.util.Date;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
-import com.darku.generator.WorkReportGenerator;
+import com.darku.generator.WorkReportExcelGenerator;
+import com.darku.generator.WorkReportModelGenerator;
+import com.darku.generator.model.AppProperties;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -28,11 +32,15 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class Starter implements CommandLineRunner {
 
+    private final WorkReportExcelGenerator reportGenerator;
+    private final WorkReportModelGenerator modelGenerator;
+    private final AppProperties appProperties;
 
-    private final WorkReportGenerator reportGenerator;
-
-    public Starter(WorkReportGenerator reportGenerator) {
+    public Starter(WorkReportExcelGenerator reportGenerator, WorkReportModelGenerator modelGenerator,
+            AppProperties appProperties) {
         this.reportGenerator = reportGenerator;
+        this.modelGenerator = modelGenerator;
+        this.appProperties = appProperties;
     }
 
     public static void main(String[] args) throws Exception {
@@ -42,7 +50,10 @@ public class Starter implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         log.info("***** STARTING UP ********");
-        reportGenerator.generate();
+        log.info("Owner {}, path to generate {}, when {}", appProperties.getOwner(), appProperties.getPathToGenerate(),
+                new Date());
+        reportGenerator.generate(modelGenerator.buildModel(), appProperties.getOwner(),
+                appProperties.getPathToGenerate());
     }
 
 }

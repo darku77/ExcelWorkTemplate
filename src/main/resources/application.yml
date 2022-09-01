@@ -1,3 +1,6 @@
 spring:
   main:
     web-application-type: none
+excel-gen-prop:
+  owner: Test
+  path-to-generate: C:\Users\xxxx\Desktop\
