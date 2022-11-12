@@ -1,12 +1,3 @@
-// =============================================================================
-// Copyright/Security Notice
-//
-// Licensed Materials - Property of Qnamic AG
-// (C) Copyright Qnamic AG 2003-2022
-// All rights reserved
-//
-// End Copyright
-// =============================================================================
 package com.darku.generator.model;
 
 import java.nio.file.Path;
