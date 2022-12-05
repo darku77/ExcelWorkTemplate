@@ -50,7 +50,7 @@ public class WorkReportModelGenerator {
         final int daysInMonth = yearMonthObject.lengthOfMonth();
 
         final var startDate = LocalDate.of(year, Month.of(monthInt), 1);
-        final var endDate = LocalDate.of(year, Month.of(monthInt + 1), 1);
+        final var endDate = monthInt == 12 ? LocalDate.of(year + 1, 1, 1) : LocalDate.of(year, Month.of(monthInt + 1), 1);
 
         startDate.datesUntil(endDate).forEach(day -> {
             final var dayOfWeek = day.getDayOfWeek();
